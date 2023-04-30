@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <!-- add viewport for mobile devices-->
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Image Overlay App</title>
+    <title>Our Nikli 24 Image Copyrighter</title>
     <style>
         /* Import Google font - Poppins */
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
@@ -150,7 +148,7 @@
 
         .preview-img img {
             max-width: 490px;
-            max-height: 335px;
+            max-height: 300px;
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -255,9 +253,9 @@
 
     <div class="container">
 
-        <a href="https://www.facebook.com/iftekharahmed.arnab.0"><img class="banner-image" src="banner-image-wide.png">
+        <a href="https://www.facebook.com/iftekharahmed.arnab.0"><img alt="result-image" class="banner-image"
+                src="banner-image-wide.png">
         </a>
-        <!-- <a href="">Join Our Nikli-24 Group</a> -->
         <div class="wrapper">
             <div class="editor-panel">
                 <div class="filter">
@@ -272,17 +270,18 @@
                             console.log('Selected file:', selectedFile);
                         });
                     </script>
+
                     <div class="slider">
                         <div class="filter-info">
                             <p class="name">Opacity</p>
-                            <p class="value" id="opacity_val">100%</p>
+                            <p class="value" id="opacity_val">75%</p>
                         </div>
                         <input type="range" id="opacity" min="0" max="100" value="75">
                     </div>
                     <div class="slider">
                         <div class="filter-info">
                             <p class="name">Scale</p>
-                            <p class="value" id="scale_val">100%</p>
+                            <p class="value" id="scale_val">50%</p>
                         </div>
                         <input type="range" id="overlay-scale" name="overlay-scale" min="0" max="200" value="50">
                     </div>
@@ -291,25 +290,27 @@
 
                     <fieldset>
                         <legend>Overlay Position:</legend>
-                        <div>
-                            <input type="radio" id="pos-top-left" name="overlay-pos" value="top-left" checked>
-                            <label for="pos-top-left">Top Left</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pos-top-right" name="overlay-pos" value="top-right">
-                            <label for="pos-top-right">Top Right</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pos-bottom-left" name="overlay-pos" value="bottom-left">
-                            <label for="pos-bottom-left">Bottom Left</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pos-bottom-right" name="overlay-pos" value="bottom-right">
-                            <label for="pos-bottom-right">Bottom Right</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="pos-center" name="overlay-pos" value="center">
-                            <label for="pos-center">Center</label>
+                        <div style="margin-left: 20px;">
+                            <div>
+                                <input type="radio" id="pos-top-left" name="overlay-pos" value="top-left" checked>
+                                <label for="pos-top-left">Top Left</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="pos-top-right" name="overlay-pos" value="top-right">
+                                <label for="pos-top-right">Top Right</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="pos-bottom-left" name="overlay-pos" value="bottom-left">
+                                <label for="pos-bottom-left">Bottom Left</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="pos-bottom-right" name="overlay-pos" value="bottom-right">
+                                <label for="pos-bottom-right">Bottom Right</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="pos-center" name="overlay-pos" value="center">
+                                <label for="pos-center">Center</label>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
@@ -362,25 +363,28 @@
 
         let debounceTimer1;
 
+        const show_opacity = document.getElementById("opacity_val");
+
         opacityInput.addEventListener('input', () => {
+            show_opacity.innerHTML = "" + opacityInput.value + "%";
+
             clearTimeout(debounceTimer1);
             debounceTimer1 = setTimeout(() => {
                 drawImages();
-            }, 100); // Adjust the debounce delay as needed
+            }, 100);
         });
 
 
-        // opacityInput.addEventListener("input", () => {
-        //     drawImages();
-        // });
+
 
         function drawImages() {
 
             if (!image1) {
                 return;
             }
-            canvas.width = Math.max(image1.width, overlayImg.width);
-            canvas.height = Math.max(image1.height, overlayImg.height);
+
+            canvas.width = image1.width;
+            canvas.height = image1.height;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image1, 0, 0);
             ctx.save();
@@ -388,6 +392,36 @@
             const scale = scaleInput.value / 100;
             const overlayPos = document.querySelector('input[name="overlay-pos"]:checked').value;
             ctx.globalAlpha = opacity;
+
+
+            ///////////////////////////
+
+            // const originalWidth = overlayImg.width;
+            // const originalHeight = overlayImg.height;
+
+            // // Set a new width for the image
+            // const newWidth = image1.width * scale;
+            // const newHeight = (originalHeight / originalWidth) * newWidth;
+
+            // ///////////////////////////
+            // switch (overlayPos) {
+            //     case "top-left":
+            //         ctx.drawImage(overlayImg, 0, 0, newWidth, newHeight);
+            //         break;
+            //     case "top-right":
+            //         ctx.drawImage(overlayImg, canvas.width - overlayImg.width * scale, 0, newWidth, newHeight);
+            //         break;
+            //     case "bottom-left":
+            //         ctx.drawImage(overlayImg, 0, canvas.height - overlayImg.height * scale, newWidth, newHeight);
+            //         break;
+            //     case "bottom-right":
+            //         ctx.drawImage(overlayImg, canvas.width - overlayImg.width * scale, canvas.height - overlayImg.height * scale, newWidth, newHeight);
+            //         break;
+            //     case "center":
+            //         ctx.drawImage(overlayImg, (canvas.width - overlayImg.width * scale) / 2, (canvas.height - overlayImg.height * scale) / 2, newWidth, newHeight);
+            //         break;
+            // }
+
 
             switch (overlayPos) {
                 case "top-left":
@@ -410,7 +444,6 @@
 
 
             /////////////////////
-
             // Convert the canvas content to a data URL
             const dataURL = canvas.toDataURL("image/jpeg");
 
@@ -424,11 +457,6 @@
 
 
         const positionRadios = document.querySelectorAll('input[name="overlay-pos"]');
-        // positionRadios.forEach(radio => {
-        //     radio.addEventListener('change', () => {
-        //         drawImages();
-        //     });
-        // });
 
         let debounceTimer2;
         positionRadios.forEach(radio => {
@@ -436,23 +464,21 @@
                 clearTimeout(debounceTimer2);
                 debounceTimer2 = setTimeout(() => {
                     drawImages();
-                }, 100); // 300 milliseconds is the debounce time
+                }, 100);
             });
         });
 
-        // const scaleInput = document.getElementById('overlay-scale');
-        // scaleInput.addEventListener('input', () => {
-        //     drawImages();
-        // });
-
         let debounceTimer;
+
+        const show_scale = document.getElementById("scale_val");
 
         const scaleInput = document.getElementById('overlay-scale');
         scaleInput.addEventListener('input', () => {
+            show_scale.innerHTML = "" + scaleInput.value + "%";
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
                 drawImages();
-            }, 100); // Adjust the debounce delay as needed
+            }, 100);
         });
 
 
@@ -464,6 +490,7 @@
             }
             const link = document.createElement("a");
             link.download = "overlay.png";
+
             link.href = canvas.toDataURL("image/png");
             link.click();
         });
