@@ -306,9 +306,6 @@
         </div>
     </div>
 
-
-
-
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -319,6 +316,7 @@
         let image1;
 
         image1Input.addEventListener("change", () => {
+
             const file = image1Input.files[0];
             const reader = new FileReader();
             reader.onload = () => {
@@ -330,13 +328,26 @@
                 img.src = reader.result;
             };
             reader.readAsDataURL(file);
+
         });
+
+
+        let debounceTimer1;
 
         opacityInput.addEventListener('input', () => {
-            drawImages();
+            clearTimeout(debounceTimer1);
+            debounceTimer1 = setTimeout(() => {
+                drawImages();
+            }, 100); // Adjust the debounce delay as needed
         });
 
+
+        // opacityInput.addEventListener("input", () => {
+        //     drawImages();
+        // });
+
         function drawImages() {
+
             if (!image1) {
                 return;
             }
@@ -344,10 +355,10 @@
             canvas.height = Math.max(image1.height, overlayImg.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(image1, 0, 0);
+            ctx.save();
             const opacity = opacityInput.value / 100;
             const scale = scaleInput.value / 100;
             const overlayPos = document.querySelector('input[name="overlay-pos"]:checked').value;
-            ctx.save();
             ctx.globalAlpha = opacity;
 
             switch (overlayPos) {
@@ -369,10 +380,20 @@
             }
             ctx.restore();
 
-            const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+
+            /////////////////////
+
+            // Convert the canvas content to a data URL
+            const dataURL = canvas.toDataURL("image/jpeg");
+
+            // Set the data URL as the source of the image tag
             const img = document.getElementById("myImage");
             img.src = dataURL;
+
+            console.log(dataURL);
+            //////////////////////////
         }
+
 
         const positionRadios = document.querySelectorAll('input[name="overlay-pos"]');
         positionRadios.forEach(radio => {
@@ -381,10 +402,21 @@
             });
         });
 
+        // const scaleInput = document.getElementById('overlay-scale');
+        // scaleInput.addEventListener('input', () => {
+        //     drawImages();
+        // });
+
+        let debounceTimer;
+
         const scaleInput = document.getElementById('overlay-scale');
         scaleInput.addEventListener('input', () => {
-            drawImages();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                drawImages();
+            }, 100); // Adjust the debounce delay as needed
         });
+
 
         const downloadBtn = document.getElementById("download-btn");
         downloadBtn.addEventListener("click", () => {
@@ -394,12 +426,11 @@
             }
             const link = document.createElement("a");
             link.download = "overlay.png";
-            link.href = canvas.toDataURL("image/png", 1);
+            link.href = canvas.toDataURL("image/png");
             link.click();
         });
+
     </script>
-
-
 </body>
 
 </html>
