@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Image Overlay App</title>
+    <style>
+        #input-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        #input-container input[type="file"] {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #canvas {
+            border: 1px solid #000;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="input-container">
+        <div>
+            <label for="image1">Image 1:</label>
+            <input type="file" id="image1">
+        </div>
+        <div>
+            <label for="image2">Image 2:</label>
+            <input type="file" id="image2">
+        </div>
+    </div>
+    <canvas id="canvas"></canvas>
+    <button id="overlay-btn">Overlay Images</button>
+    <button id="download-btn">Download Image</button>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const image1Input = document.getElementById("image1");
+        const image2Input = document.getElementById("image2");
+        const overlayBtn = document.getElementById("overlay-btn");
+        const downloadBtn = document.getElementById("download-btn");
+        let image1;
+        let image2;
+
+        image1Input.addEventListener("change", () => {
+            const file = image1Input.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                    image1 = img;
+                    drawImages();
+                }
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        });
+
+        image2Input.addEventListener("change", () => {
+            const file = image2Input.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                    image2 = img;
+                    drawImages();
+                }
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        });
+
+        overlayBtn.addEventListener("click", () => {
+            if (!image1 || !image2) {
+                alert("Please select two images first.");
+                return;
+            }
+            drawImages();
+        });
+
+        downloadBtn.addEventListener("click", () => {
+            if (!image1 || !image2) {
+                alert("Please select two images first.");
+                return;
+            }
+            const link = document.createElement("a");
+            link.download = "overlay.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+
+        function drawImages() {
+            if (!image1 || !image2) {
+                return;
+            }
+            canvas.width = Math.max(image1.width, image2.width);
+            canvas.height = Math.max(image1.height
+                , image2.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image1, 0, 0);
+            ctx.save();
+            ctx.globalAlpha = 0.75;
+            ctx.drawImage(image2, 0, 0);
+            ctx.restore();
+        }
+    </script>
+</body>
+
+</html>

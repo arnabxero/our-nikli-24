@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Overlay App</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"],
+        input[type="range"],
+        input[type="radio"] {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #result {
+            display: none;
+            margin: 20px;
+        }
+
+        #result img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Image Overlay App</h1>
+    <form id="form">
+        <div>
+            <label for="image1">Image 1:</label>
+            <input type="file" id="image1" accept="image/*" />
+        </div>
+        <div>
+            <label for="image2">Image 2:</label>
+            <input type="file" id="image2" accept="image/*" />
+        </div>
+        <div>
+            <label for="opacity">Opacity:</label>
+            <input type="range" id="opacity" name="opacity" min="0" max="1" step="0.01" value="0.75" />
+            <span id="opacity-value">0.75</span>
+        </div>
+        <fieldset>
+            <legend>Overlay Position:</legend>
+            <div>
+                <input type="radio" id="top-left" name="position" value="top-left" checked />
+                <label for="top-left">Top Left</label>
+            </div>
+            <div>
+                <input type="radio" id="top-right" name="position" value="top-right" />
+                <label for="top-right">Top Right</label>
+            </div>
+            <div>
+                <input type="radio" id="bottom-left" name="position" value="bottom-left" />
+                <label for="bottom-left">Bottom Left</label>
+            </div>
+            <div>
+                <input type="radio" id="bottom-right" name="position" value="bottom-right" />
+                <label for="bottom-right">Bottom Right</label>
+            </div>
+            <div>
+                <input type="radio" id="center" name="position" value="center" />
+                <label for="center">Center</label>
+            </div>
+        </fieldset>
+        <button type="submit">Overlay Images</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        const form = document.getElementById('form');
+        const result = document.getElementById('result');
+        const opacityInput = document.getElementById('opacity');
+        const opacityValue = document.getElementById('opacity-value');
+        const positionInputs = document.querySelectorAll('input[name="position"]');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const image1 = document.getElementById('image1').files[0];
+            const image2 = document.getElementById('image2').files[0];
+            const opacity = opacityInput.value;
+            let position = '';
+
+            for (const positionInput of positionInputs) {
+                if (positionInput.checked) {
+                    position = positionInput.value;
+                    break;
+                }
+            }
+
+            if (image1 && image2) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img1 = new Image();
+                img1.onload = () => {
+                    canvas.width = img1.width;
+                    canvas.height = img1.height;
+
+                    ctx.drawImage(img1, 0, 0);
+
+                    const img2 = new Image();
+                    img2.onload = () => {
+                        let x, y;
+
+                        switch (position) {
+                            case 'top-left':
+                                x = 0;
+                                y = 0;
+                                break;
+                            case 'top-right':
+                                x = canvas.width - img2.width;
+                                y = 0;
+                                break;
+                            case 'bottom-left':
+                                x = 0;
+                                y = canvas.height - img2.height;
+                                break;
+                            case 'bottom-right':
+                                x = canvas.width - img2.width;
+                                y = canvas.height - img2.height;
+                                break;
+                            default:
+                                x = (canvas.width - img2.width) / 2;
+                                y = (canvas.height - img2.height) / 2;
+                                break;
+                        }
+
+                        ctx.globalAlpha = opacity;
+                        ctx.drawImage(img2, x, y);
+
+                        const dataURL = canvas.toDataURL('image/png');
+                        result.innerHTML = `<p>Overlayed image:</p><img src="${dataURL}" />`;
+                        result.style.display = 'block';
+                    };
+
+                    img2.src = URL.createObjectURL(image2);
+                };
+
+                img1.src = URL.createObjectURL(image1);
+
+            } else {
+                alert('Please select two images.');
+            }
+        });
+
+        opacityInput.addEventListener('input', () => {
+            opacityValue.textContent = opacityInput.value;
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Overlay App</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #result {
+            display: none;
+            margin: 20px;
+        }
+
+        #result img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Image Overlay App</h1>
+    <form id="form">
+        <div>
+            <label for="image1">Image 1:</label>
+            <input type="file" id="image1" accept="image/*" />
+        </div>
+        <div>
+            <label for="image2">Image 2:</label>
+            <input type="file" id="image2" accept="image/*" />
+        </div>
+        <button type="submit">Overlay Images</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        const form = document.getElementById('form');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const image1 = document.getElementById('image1').files[0];
+            const image2 = document.getElementById('image2').files[0];
+
+            if (image1 && image2) {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                const imageObj1 = new Image();
+                imageObj1.src = URL.createObjectURL(image1);
+                imageObj1.onload = () => {
+                    canvas.width = imageObj1.width;
+                    canvas.height = imageObj1.height;
+
+                    context.drawImage(imageObj1, 0, 0);
+
+                    const imageObj2 = new Image();
+                    imageObj2.src = URL.createObjectURL(image2);
+                    imageObj2.onload = () => {
+                        context.globalAlpha = 0.75;
+                        context.drawImage(imageObj2, 0, 0);
+
+                        const dataURL = canvas.toDataURL('image/png');
+                        const img = document.createElement('img');
+                        img.src = dataURL;
+
+                        result.innerHTML = '';
+                        result.appendChild(img);
+                        result.style.display = 'block';
+                    };
+                };
+            }
+        });
+
+    </script>
+</body>
+
+</html>

