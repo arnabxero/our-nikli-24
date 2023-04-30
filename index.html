@@ -256,7 +256,7 @@
                             <p class="name">Scale</p>
                             <p class="value" id="scale_val">100%</p>
                         </div>
-                        <input type="range" id="overlay-scale" name="overlay-scale" min="0" max="100" value="50">
+                        <input type="range" id="overlay-scale" name="overlay-scale" min="0" max="200" value="50">
                     </div>
                 </div>
                 <div class="rotate">
@@ -297,10 +297,9 @@
             </div>
         </div>
         <div class="controls">
-            <button class="reset-filter" id="overlay-btn">Overlay Images</button>
+            <button class="reset-filter" id="overlay-btn" onclick="drawImages()">Overlay Images</button>
 
             <div class="row">
-
                 <button class="save-img" id="download-btn">Download Image</button>
 
             </div>
@@ -317,6 +316,7 @@
         let image1;
 
         image1Input.addEventListener("change", () => {
+
             const file = image1Input.files[0];
             const reader = new FileReader();
             reader.onload = () => {
@@ -331,13 +331,20 @@
 
         });
 
+
+        let debounceTimer1;
+
+        opacityInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer1);
+            debounceTimer1 = setTimeout(() => {
+                drawImages();
+            }, 100); // Adjust the debounce delay as needed
+        });
+
+
         // opacityInput.addEventListener("input", () => {
         //     drawImages();
         // });
-
-        opacityInput.addEventListener('input', _.debounce(() => {
-            drawImages();
-        }, 100)); // 100ms delay
 
         function drawImages() {
 
@@ -395,13 +402,20 @@
             });
         });
 
-        const scaleInput = document.getElementById('overlay-scale');
+        // const scaleInput = document.getElementById('overlay-scale');
         // scaleInput.addEventListener('input', () => {
         //     drawImages();
         // });
-        scaleInput.addEventListener('input', _.debounce(() => {
-            drawImages();
-        }, 100)); // 100ms delay
+
+        let debounceTimer;
+
+        const scaleInput = document.getElementById('overlay-scale');
+        scaleInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                drawImages();
+            }, 100); // Adjust the debounce delay as needed
+        });
 
 
         const downloadBtn = document.getElementById("download-btn");
