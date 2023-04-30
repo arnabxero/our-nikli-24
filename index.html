@@ -299,10 +299,7 @@
         <div class="controls">
             <button class="reset-filter" id="overlay-btn">Overlay Images</button>
 
-
             <div class="row">
-
-
 
                 <button class="save-img" id="download-btn">Download Image</button>
 
@@ -319,16 +316,7 @@
         overlayImg.src = "overlay.png";
         let image1;
 
-        /////////// preview canvas /////
-        // const preview_canvas = document.getElementById("preview-canvas");
-        // const preview_ctx = canvas.getContext("2d");
-        ///////////////////////////////
-
         image1Input.addEventListener("change", () => {
-
-
-
-
             const file = image1Input.files[0];
             const reader = new FileReader();
             reader.onload = () => {
@@ -343,9 +331,13 @@
 
         });
 
-        opacityInput.addEventListener("input", () => {
+        // opacityInput.addEventListener("input", () => {
+        //     drawImages();
+        // });
+
+        opacityInput.addEventListener('input', _.debounce(() => {
             drawImages();
-        });
+        }, 100)); // 100ms delay
 
         function drawImages() {
 
@@ -404,9 +396,12 @@
         });
 
         const scaleInput = document.getElementById('overlay-scale');
-        scaleInput.addEventListener('input', () => {
+        // scaleInput.addEventListener('input', () => {
+        //     drawImages();
+        // });
+        scaleInput.addEventListener('input', _.debounce(() => {
             drawImages();
-        });
+        }, 100)); // 100ms delay
 
 
         const downloadBtn = document.getElementById("download-btn");
