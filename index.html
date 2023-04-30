@@ -331,6 +331,9 @@
             <div class="row">
                 <button class="save-img" id="download-btn">Download Image</button>
 
+                <div id="notdownloadingdiv" style="text-align: center; display: none;">
+                    <p id="notdownloading">Wait for 5-10 seconds. If the download is still not starting </p>
+                </div>
             </div>
         </div>
     </div>
@@ -498,7 +501,18 @@
             link.download = nameWithoutExtension + "_our_nikli_24.png";
 
             link.href = canvas.toDataURL("image/png");
+
+            link.text = "Click Here";
+
+            const paragraph = document.getElementById('notdownloading');
+
+            paragraph.appendChild(link);
+
+            const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+            divElement.style.display = ''; // remove the display property
+
             link.click();
+
         });
 
     </script>
