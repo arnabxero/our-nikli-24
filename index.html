@@ -396,9 +396,19 @@
 
 
         const positionRadios = document.querySelectorAll('input[name="overlay-pos"]');
+        // positionRadios.forEach(radio => {
+        //     radio.addEventListener('change', () => {
+        //         drawImages();
+        //     });
+        // });
+
+        let debounceTimer2;
         positionRadios.forEach(radio => {
             radio.addEventListener('change', () => {
-                drawImages();
+                clearTimeout(debounceTimer2);
+                debounceTimer2 = setTimeout(() => {
+                    drawImages();
+                }, 100); // 300 milliseconds is the debounce time
             });
         });
 
