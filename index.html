@@ -339,6 +339,7 @@
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         const image1Input = document.getElementById("image1");
+
         const opacityInput = document.getElementById("opacity");
         const overlayImg = new Image();
         overlayImg.src = "overlay.png";
@@ -488,8 +489,13 @@
                 alert("Please select an image first.");
                 return;
             }
+
+            const fileName = image1Input.files[0].name;
+
+            const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf('.'));
+
             const link = document.createElement("a");
-            link.download = "overlay.png";
+            link.download = nameWithoutExtension + "_our_nikli_24.png";
 
             link.href = canvas.toDataURL("image/png");
             link.click();
