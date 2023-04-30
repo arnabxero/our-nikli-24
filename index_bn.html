@@ -183,10 +183,22 @@
             border: 1px solid #6c757d;
         }
 
+        .choose-img:hover {
+            color: black;
+            background-color: #0088ff;
+            border: 1px solid #fd00d3;
+        }
+
         .controls .save-img {
             margin-left: 5px;
             background: #5372f0;
             border: 1px solid #5372f0;
+        }
+
+        .save-img:hover {
+            color: rgb(0, 0, 0);
+            background: rgb(240, 83, 83);
+            border: 1px solid #53f06d;
         }
 
         @media screen and (max-width: 760px) {
@@ -222,14 +234,30 @@
                 margin-left: 0px;
             }
         }
+
+        .banner-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+
+        @media only screen and (min-width: 768px) {
+            .banner-image {
+                width: 50%;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h2>Our Nikli-24</h2>
-        <h6>ছবি কপিরাইটার এপ্লিকেশন by Arnab</h6>
+
+        <a href="https://www.facebook.com/iftekharahmed.arnab.0"><img class="banner-image" src="banner-image-wide.png">
+        </a>
+        <!-- <a href="">Join Our Nikli-24 Group</a> -->
         <div class="wrapper">
             <div class="editor-panel">
                 <div class="filter">
@@ -310,6 +338,7 @@
         </div>
     </div>
 
+
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -319,15 +348,7 @@
         overlayImg.src = "overlay.png";
         let image1;
 
-        /////////// preview canvas /////
-        // const preview_canvas = document.getElementById("preview-canvas");
-        // const preview_ctx = canvas.getContext("2d");
-        ///////////////////////////////
-
         image1Input.addEventListener("change", () => {
-
-
-
 
             const file = image1Input.files[0];
             const reader = new FileReader();
@@ -343,9 +364,20 @@
 
         });
 
-        opacityInput.addEventListener("input", () => {
-            drawImages();
+
+        let debounceTimer1;
+
+        opacityInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer1);
+            debounceTimer1 = setTimeout(() => {
+                drawImages();
+            }, 100); // Adjust the debounce delay as needed
         });
+
+
+        // opacityInput.addEventListener("input", () => {
+        //     drawImages();
+        // });
 
         function drawImages() {
 
@@ -397,15 +429,35 @@
 
 
         const positionRadios = document.querySelectorAll('input[name="overlay-pos"]');
+        // positionRadios.forEach(radio => {
+        //     radio.addEventListener('change', () => {
+        //         drawImages();
+        //     });
+        // });
+
+        let debounceTimer2;
         positionRadios.forEach(radio => {
             radio.addEventListener('change', () => {
-                drawImages();
+                clearTimeout(debounceTimer2);
+                debounceTimer2 = setTimeout(() => {
+                    drawImages();
+                }, 100); // 300 milliseconds is the debounce time
             });
         });
 
+        // const scaleInput = document.getElementById('overlay-scale');
+        // scaleInput.addEventListener('input', () => {
+        //     drawImages();
+        // });
+
+        let debounceTimer;
+
         const scaleInput = document.getElementById('overlay-scale');
         scaleInput.addEventListener('input', () => {
-            drawImages();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                drawImages();
+            }, 100); // Adjust the debounce delay as needed
         });
 
 
