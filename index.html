@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Our Nikli 24 Image Copyrighter</title>
+    <!--- add favicon -->
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
     <style>
         /* Import Google font - Poppins */
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
@@ -246,6 +248,11 @@
                 width: 50%;
             }
         }
+
+        .tutorial-btn:hover {
+            background-color: gray;
+            border: 1px solid rgb(255, 0, 38);
+        }
     </style>
 </head>
 
@@ -262,6 +269,14 @@
                     <input type="file" id="image1">
                     <button class="choose-img" onclick="document.getElementById('image1').click()">Select
                         Image</button>
+                    <button class="tutorial-btn" title="Click to see step by step guide"
+                        onclick="window.location.href='tutorial.html'">How
+                        To Use?</button>
+                    <button class="tutorial-btn" title="Click to see step by step guide"
+                        onclick="window.location.href='https://web.facebook.com/groups/391775034170522'">Join Our
+                        Nikli-24</button>
+                    <button class="tutorial-btn" title="Click to see step by step guide"
+                        onclick="window.location.href='index_bn.html'">বাংলায় ব্যবহার করুন</button>
 
                     <script>
                         const imageInput = document.getElementById('image1');
@@ -378,9 +393,6 @@
             }, 100);
         });
 
-
-
-
         function drawImages() {
 
             if (!image1) {
@@ -396,36 +408,6 @@
             const scale = scaleInput.value / 100;
             const overlayPos = document.querySelector('input[name="overlay-pos"]:checked').value;
             ctx.globalAlpha = opacity;
-
-
-            ///////////////////////////
-
-            // const originalWidth = overlayImg.width;
-            // const originalHeight = overlayImg.height;
-
-            // // Set a new width for the image
-            // const newWidth = image1.width * scale;
-            // const newHeight = (originalHeight / originalWidth) * newWidth;
-
-            // ///////////////////////////
-            // switch (overlayPos) {
-            //     case "top-left":
-            //         ctx.drawImage(overlayImg, 0, 0, newWidth, newHeight);
-            //         break;
-            //     case "top-right":
-            //         ctx.drawImage(overlayImg, canvas.width - overlayImg.width * scale, 0, newWidth, newHeight);
-            //         break;
-            //     case "bottom-left":
-            //         ctx.drawImage(overlayImg, 0, canvas.height - overlayImg.height * scale, newWidth, newHeight);
-            //         break;
-            //     case "bottom-right":
-            //         ctx.drawImage(overlayImg, canvas.width - overlayImg.width * scale, canvas.height - overlayImg.height * scale, newWidth, newHeight);
-            //         break;
-            //     case "center":
-            //         ctx.drawImage(overlayImg, (canvas.width - overlayImg.width * scale) / 2, (canvas.height - overlayImg.height * scale) / 2, newWidth, newHeight);
-            //         break;
-            // }
-
 
             switch (overlayPos) {
                 case "top-left":
@@ -517,5 +499,7 @@
 
     </script>
 </body>
+
+
 
 </html>
