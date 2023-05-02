@@ -270,21 +270,19 @@
 
     </script>
     
-  <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: 'http://arnab.rf.gd/our_nikli_24_counter/index.php',
-                type: 'POST',
-                data: { ip: '<?php echo $_SERVER["REMOTE_ADDR"]; ?>' },
-                success: function (data) {
-                    // Success callback function
-                },
-                error: function (xhr, status, error) {
-                    // Error callback function
-                }
-            });
-        });
-    </script>
+ <script>
+$(document).ready(function(){
+    $.ajax({
+        url: "http://arnab.rf.gd/our_nikli_24_counter/index.php",
+        data: {ip: "<?php echo $_SERVER['REMOTE_ADDR']; ?>"},
+        dataType: "script",
+        success: function(){
+            console.log("Script executed successfully.");
+        }
+    });
+});
+</script>
+
 
 
 
