@@ -6,6 +6,9 @@
 
     <meta charset="UTF-8">
     <title>Image Overlay App</title>
+    
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <style>
         #input-container {
             display: flex;
@@ -268,7 +271,18 @@
     </script>
     
     
-            <a href="#"><img alt="views" title="GitHub profile views" src="http://arnab.rf.gd/our_nikli_24_counter/" /></a>
+  <div id="ajax-response"></div>
+
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "http://arnab.rf.gd/our_nikli_24_counter/",
+      success: function(response) {
+        $("#ajax-response").html(response);
+      }
+    });
+  });
+</script>
 
 
 
