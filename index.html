@@ -260,8 +260,7 @@
 
     <div class="container">
 
-        <a href="https://www.facebook.com/iftekharahmed.arnab.0"><img alt="result-image" class="banner-image"
-                src="banner-image-wide.png">
+        <a href="https://arnob.dev"><img alt="result-image" class="banner-image" src="banner-image-wide.png">
         </a>
         <div class="wrapper">
             <div class="editor-panel">
@@ -282,7 +281,7 @@
                         const imageInput = document.getElementById('image1');
                         imageInput.addEventListener('change', function () {
                             const selectedFile = imageInput.files[0];
-                            console.log('Selected file:', selectedFile);
+                            // console.log('Selected file:', selectedFile);
                         });
                     </script>
 
@@ -437,7 +436,7 @@
             const img = document.getElementById("myImage");
             img.src = dataURL;
 
-            console.log(dataURL);
+            // console.log(dataURL);
             //////////////////////////
         }
 
@@ -480,20 +479,54 @@
             const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf('.'));
 
             const link = document.createElement("a");
-            link.download = nameWithoutExtension + "_our_nikli_24.png";
 
-            link.href = canvas.toDataURL("image/png");
+            /////////////////////////////
+            // Convert canvas data to a Blob
+            canvas.toBlob(function (blob) {
+                // Create an object URL from the Blob
+                const url = URL.createObjectURL(blob);
 
-            link.text = "Click Here";
+                console.log(url);
+                // Set the href attribute of the download link
+                link.href = url;
 
-            const paragraph = document.getElementById('notdownloading');
+                link.text = "Click Here"
 
-            paragraph.appendChild(link);
+                // Set the download attribute of the download link
+                link.download = nameWithoutExtension + "_our_nikli_24.png";
 
-            const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
-            divElement.style.display = ''; // remove the display property
+                const paragraph = document.getElementById('notdownloading');
 
-            link.click();
+                paragraph.appendChild(link);
+
+                const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+                divElement.style.display = ''; // remove the display property
+
+                // Trigger a click event on the download link
+                link.click();
+
+                // Revoke the object URL to free up resources
+                URL.revokeObjectURL(url);
+            }, "image/png");
+
+            ///////////////////////////////////
+
+            // link.download = nameWithoutExtension + "_our_nikli_24.png";
+
+            // link.href = canvas.toDataURL("image/png");
+
+            // console.log(canvas.toDataURL("image/png"));
+
+            // link.text = "Click Here";
+
+            // const paragraph = document.getElementById('notdownloading');
+
+            // paragraph.appendChild(link);
+
+            // const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+            // divElement.style.display = ''; // remove the display property
+
+            // link.click();
 
         });
 
