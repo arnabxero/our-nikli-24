@@ -340,10 +340,10 @@
             </div>
         </div>
         <div class="controls">
-            <button class="reset-filter" id="overlay-btn" onclick="drawImages()">Overlay Images</button>
+            <button class="reset-filter" id="generate-btn" onclick="uploadImage()">1. Generate</button>
 
             <div class="row">
-                <button class="save-img" id="download-btn">Download Image</button>
+                <button class="save-img" id="download-btn">2. Download</button>
 
                 <div id="notdownloadingdiv" style="text-align: center; display: none;">
                     <p id="notdownloading">Wait for 5-10 seconds. If the download is still not starting </p>
@@ -361,6 +361,9 @@
         const overlayImg = new Image();
         overlayImg.src = "overlay.png";
         let image1;
+        let isLoading = false;
+
+        let downloadGeneratedImageUrl = "";
 
         image1Input.addEventListener("change", () => {
 
@@ -467,35 +470,206 @@
         });
 
 
-        const downloadBtn = document.getElementById("download-btn");
-        downloadBtn.addEventListener("click", () => {
+        // const downloadBtn = document.getElementById("download-btn");
+        // downloadBtn.addEventListener("click", () => {
+        //     if (!image1) {
+        //         alert("Please select an image first.");
+        //         return;
+        //     }
+
+        //     const fileName = image1Input.files[0].name;
+
+        //     const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf('.'));
+
+        //     const link = document.createElement("a");
+        //     link.download = nameWithoutExtension + "_our_nikli_24.png";
+
+        //     link.href = canvas.toDataURL("image/png");
+
+        //     console.log(canvas.toDataURL("image/png"));
+
+        //     link.text = "Click Here";
+
+        //     const paragraph = document.getElementById('notdownloading');
+
+        //     paragraph.appendChild(link);
+
+        //     const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+        //     divElement.style.display = ''; // remove the display property
+
+        //     link.click();
+
+        // });
+
+
+
+
+
+
+        ///////////////////////
+
+
+        function generateRandomString(length) {
+            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let result = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                result += charset.charAt(randomIndex);
+            }
+            return result;
+        }
+
+        const uploadImageToGitHub = async (base64Image) => {
+            try {
+                isLoading = true;
+
+                if (isLoading) {
+                    var generateButton = document.getElementById('generate-btn');
+
+                    generateButton.innerHTML = "Generating...";
+                    generateButton.style.backgroundColor = "blue";
+                    generateButton.style.color = "white";
+                }
+
+                const randStr = generateRandomString(30);
+                const extension = 'png';
+
+                const repoOwner = "xerodorik";
+                const repoName = "niklihaorfiles";
+                const filePath = `nikli_haor_logo_set_files/file_${randStr}.${extension}`;
+                const commitMessage = `Upload file of____${randStr}.${extension}`;
+
+                const githubToken = "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";
+
+                // Check if the file exists
+                const responseCheck = await fetch(
+                    `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${githubToken}`,
+                        },
+                    }
+                );
+
+                if (responseCheck.status === 200) {
+                    const shaData = await responseCheck.json();
+                    const currentSHA = shaData.sha;
+
+                    // Delete the existing file
+                    const responseDelete = await fetch(
+                        `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${githubToken}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                message: 'Delete existing file',
+                                sha: currentSHA,
+                            }),
+                        }
+                    );
+
+                    if (responseDelete.status === 204) {
+                        console.log('Existing file deleted successfully');
+                    } else {
+                        console.log('Failed to delete existing file:', await responseDelete.text());
+                    }
+                } else if (responseCheck.status !== 404) {
+                    console.log('Error checking for existing file:', await responseCheck.text());
+                }
+
+                const content = base64Image;
+
+                const payload = JSON.stringify({
+                    message: commitMessage,
+                    content,
+                });
+
+                const responseUpload = await fetch(
+                    `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            Authorization: `Bearer ${githubToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: payload,
+                    }
+                );
+
+                if (responseUpload.status === 201) {
+                    const responseData = await responseUpload.json();
+                    return responseData.content.download_url;
+                } else {
+                    console.log('Failed to upload file to GitHub:', responseUpload.status, responseUpload.statusText);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error during GitHub upload:', error);
+                return null;
+            } finally {
+                isLoading = false;
+            }
+        };
+
+
+        async function uploadImage() {
             if (!image1) {
-                alert("Please select an image first.");
+                alert('Please select an image first.');
                 return;
             }
+            const base64Image = canvas.toDataURL('image/png').split(',')[1]; // Extract the base64 data
 
-            const fileName = image1Input.files[0].name;
+            const uploadedImageUrl = await uploadImageToGitHub(base64Image);
 
-            const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf('.'));
+            if (uploadedImageUrl) {
+                var generateButton = document.getElementById('generate-btn');
 
-            const link = document.createElement("a");
-            link.download = nameWithoutExtension + "_our_nikli_24.png";
+                generateButton.innerHTML = "Generation Complete";
+                generateButton.style.backgroundColor = "green";
+                generateButton.style.color = "white";
+            } else {
+                var generateButton = document.getElementById('generate-btn');
 
-            link.href = canvas.toDataURL("image/png");
+                generateButton.innerHTML = "Generation Failed";
+                generateButton.style.backgroundColor = "red";
+                generateButton.style.color = "white";
+            }
+            downloadGeneratedImageUrl = uploadedImageUrl;
+        }
 
-            link.text = "Click Here";
 
-            const paragraph = document.getElementById('notdownloading');
+        const downloadBtn = document.getElementById('download-btn');
+        downloadBtn.addEventListener('click', function () {
 
-            paragraph.appendChild(link);
+            if (downloadGeneratedImageUrl.length > 0) {
 
-            const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
-            divElement.style.display = ''; // remove the display property
+                fetch(downloadGeneratedImageUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
 
-            link.click();
-
+                        const fileName = image1Input.files[0].name;
+                        const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf('.'));
+                        const link = document.createElement("a");
+                        link.href = url;
+                        link.download = nameWithoutExtension + "_nikli_haor_arnab.png";
+                        link.text = "Click Here";
+                        const paragraph = document.getElementById('notdownloading');
+                        paragraph.appendChild(link);
+                        const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+                        divElement.style.display = ''; // remove the display property
+                        link.click();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the image:', error);
+                    });
+            } else {
+                alert('Image not genereated properly');
+            }
         });
-
     </script>
 </body>
 
