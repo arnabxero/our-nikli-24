@@ -480,49 +480,47 @@
 
             const link = document.createElement("a");
 
-            canvas.toBlob(function (blob) {
-                // Create an object URL from the Blob
-                const url = URL.createObjectURL(blob);
+            // canvas.toBlob(function (blob) {
+            //     // Create an object URL from the Blob
+            //     const url = URL.createObjectURL(blob);
 
-                console.log(url);
-                // Set the href attribute of the download link
-                link.href = url;
+            //     console.log(url);
+            //     // Set the href attribute of the download link
+            //     link.href = url;
 
-                link.text = "Click Here"
+            //     link.text = "Click Here"
 
-                // Set the download attribute of the download link
-                link.download = nameWithoutExtension + "_our_nikli_24.png";
+            //     // Set the download attribute of the download link
+            //     link.download = nameWithoutExtension + "_our_nikli_24.png";
 
-                const paragraph = document.getElementById('notdownloading');
+            //     const paragraph = document.getElementById('notdownloading');
 
-                paragraph.appendChild(link);
+            //     paragraph.appendChild(link);
 
-                const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
-                divElement.style.display = ''; // remove the display property
+            //     const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+            //     divElement.style.display = ''; // remove the display property
 
-                // Trigger a click event on the download link
-                link.click();
+            //     // Trigger a click event on the download link
+            //     link.click();
 
-                // Revoke the object URL to free up resources
-                URL.revokeObjectURL(url);
-            }, "image/png");
+            //     // Revoke the object URL to free up resources
+            //     URL.revokeObjectURL(url);
+            // }, "image/png");
 
+            link.download = nameWithoutExtension + "_our_nikli_24.png";
 
+            link.href = canvas.toDataURL("image/png");
 
-            // link.download = nameWithoutExtension + "_our_nikli_24.png";
+            link.text = "Click Here";
 
-            // link.href = canvas.toDataURL("image/png");
+            const paragraph = document.getElementById('notdownloading');
 
-            // link.text = "Click Here";
+            paragraph.appendChild(link);
 
-            // const paragraph = document.getElementById('notdownloading');
+            const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
+            divElement.style.display = ''; // remove the display property
 
-            // paragraph.appendChild(link);
-
-            // const divElement = document.getElementById('notdownloadingdiv'); // select the <div> element
-            // divElement.style.display = ''; // remove the display property
-
-            // link.click();
+            link.click();
 
         });
 
